@@ -1,0 +1,41 @@
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Flashcards de Perguntas e Respostas</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <h1>Flashcards - Quiz de Perguntas</h1>
+
+  <textarea id="inputArea" rows="10" placeholder="Cole aqui as perguntas no formato: P: pergunta / R: resposta"></textarea>
+  <label><input type="checkbox" id="randomOrder"> Ordem Aleatória</label>
+  <label><input type="checkbox" id="originalOrder"> Ordem Original</label>
+  <button id="startButton">Iniciar (Enter)</button>
+
+  <div class="flashcard" id="quizArea">
+    <h2 id="questionText"></h2>
+    <button id="showAnswer">Mostrar Resposta</button>
+    <h3 id="answerText" class="hidden"></h3>
+    <button id="gotItRight" class="hidden">Acertei</button>
+    <button id="gotItWrong" class="hidden">Errei</button>
+  </div>
+
+  <div class="final-screen" id="finalScreen">
+    <h2>Resultado Final</h2>
+    <div class="result-list">
+      <div>
+        <h3>Acertos</h3>
+        <ul id="correctList"></ul>
+      </div>
+      <div>
+        <h3>Erros</h3>
+        <ul id="wrongList"></ul>
+      </div>
+    </div>
+    <button onclick="restart(false)">Recomeçar Tudo</button>
+    <button onclick="restart(true)">Repetir Só os Errados</button>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
