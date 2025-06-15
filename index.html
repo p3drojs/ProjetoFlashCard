@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -7,33 +8,35 @@
 <body>
   <h1>Flashcards - Quiz de Perguntas</h1>
 
-  <textarea id="inputArea" rows="10" placeholder="Cole aqui as perguntas no formato: P: pergunta / R: resposta"></textarea>
-  <label><input type="checkbox" id="randomOrder"> Ordem Aleatória</label>
-  <label><input type="checkbox" id="originalOrder"> Ordem Original</label>
-  <button id="startButton">Iniciar (Enter)</button>
-
-  <div class="flashcard" id="quizArea">
-    <h2 id="questionText"></h2>
-    <button id="showAnswer">Mostrar Resposta</button>
-    <h3 id="answerText" class="hidden"></h3>
-    <button id="gotItRight" class="hidden">Acertei</button>
-    <button id="gotItWrong" class="hidden">Errei</button>
+  <div class="container-entrada">
+    <textarea id="area-entrada" rows="10" placeholder="P: pergunta / R: resposta"></textarea>
+    <label><input type="checkbox" id="ordem-aleatoria"> Ordem Aleatória</label>
+    <label><input type="checkbox" id="ordem-original"> Ordem Original</label>
+    <button id="botao-iniciar">Iniciar (Enter)</button>
   </div>
 
-  <div class="final-screen" id="finalScreen">
+  <div class="container-quiz" id="area-quiz">
+    <h2 id="texto-pergunta"></h2>
+    <button id="botao-mostrar-resposta">Mostrar Resposta</button>
+    <h3 id="texto-resposta" class="oculto"></h3>
+    <button id="botao-acertou" class="oculto">Acertei</button>
+    <button id="botao-errou" class="oculto">Errei</button>
+  </div>
+
+  <div class="container-final" id="tela-final">
     <h2>Resultado Final</h2>
-    <div class="result-list">
+    <div class="resultados">
       <div>
         <h3>Acertos</h3>
-        <ul id="correctList"></ul>
+        <ul id="lista-acertos"></ul>
       </div>
       <div>
         <h3>Erros</h3>
-        <ul id="wrongList"></ul>
+        <ul id="lista-erros"></ul>
       </div>
     </div>
-    <button onclick="restart(false)">Recomeçar Tudo</button>
-    <button onclick="restart(true)">Repetir Só os Errados</button>
+    <button onclick="reiniciar(false)">Recomeçar Tudo</button>
+    <button onclick="reiniciar(true)">Repetir Só os Errados</button>
   </div>
 
   <script src="js/script.js"></script>

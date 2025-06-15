@@ -4,6 +4,7 @@ body {
   background: #121212;
   color: #f0f0f0;
   text-align: center;
+  margin: 0;
 }
 
 textarea, button, label {
@@ -13,60 +14,95 @@ textarea, button, label {
   max-width: 500px;
   margin-left: auto;
   margin-right: auto;
+  box-sizing: border-box;
 }
 
 textarea {
   background: #1e1e1e;
   color: #f0f0f0;
   border: 1px solid #333;
+  padding: 10px;
+  border-radius: 5px;
+  resize: vertical;
 }
 
 button {
   background: #333;
   color: #fff;
   border: none;
-  padding: 10px;
+  padding: 12px;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 1rem;
 }
 
 button:hover {
   background: #444;
 }
 
-label {
-  color: #ddd;
-}
-
-input[type="checkbox"] {
-  margin-right: 5px;
-}
-
-.flashcard, .final-screen {
-  margin-top: 30px;
-  padding: 20px;
+.container-entrada,
+.container-quiz,
+.container-final {
   background: #1e1e1e;
+  padding: 20px;
   border-radius: 10px;
+  margin-top: 20px;
   box-shadow: 0 0 10px #000;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container-quiz,
+.container-final {
   display: none;
 }
 
-.result-list {
+.resultados {
   display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
 }
 
-.result-list ul {
+.resultados ul {
   list-style: none;
-  padding: 0;
-  width: 45%;
+  padding: 10px;
   background: #2c2c2c;
   border-radius: 5px;
-  padding: 10px;
-  color: #fff;
+  flex: 1 1 45%;
+  min-width: 200px;
 }
 
-.hidden {
+.acerto {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.erro {
+  color: #ff4d4d;
+}
+
+.oculto {
   display: none;
+}
+
+/* Responsivo para celulares */
+@media (max-width: 600px) {
+  .resultados {
+    flex-direction: column;
+  }
+
+  .resultados ul {
+    flex: 1 1 100%;
+  }
+
+  button {
+    font-size: 1.1rem;
+    padding: 14px;
+  }
+
+  textarea {
+    font-size: 1rem;
+  }
 }

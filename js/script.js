@@ -1,104 +1,110 @@
-const inputArea = document.getElementById('inputArea');
-const startButton = document.getElementById('startButton');
-const randomOrder = document.getElementById('randomOrder');
-const originalOrder = document.getElementById('originalOrder');
-const quizArea = document.getElementById('quizArea');
-const questionText = document.getElementById('questionText');
-const answerText = document.getElementById('answerText');
-const showAnswer = document.getElementById('showAnswer');
-const gotItRight = document.getElementById('gotItRight');
-const gotItWrong = document.getElementById('gotItWrong');
-const finalScreen = document.getElementById('finalScreen');
-const correctList = document.getElementById('correctList');
-const wrongList = document.getElementById('wrongList');
+const areaEntrada = document.getElementById('area-entrada');
+const botaoIniciar = document.getElementById('botao-iniciar');
+const chkOrdemAleatoria = document.getElementById('ordem-aleatoria');
+const chkOrdemOriginal = document.getElementById('ordem-original');
+const areaQuiz = document.getElementById('area-quiz');
+const textoPergunta = document.getElementById('texto-pergunta');
+const textoResposta = document.getElementById('texto-resposta');
+const botaoMostrarResposta = document.getElementById('botao-mostrar-resposta');
+const botaoAcertou = document.getElementById('botao-acertou');
+const botaoErrou = document.getElementById('botao-errou');
+const telaFinal = document.getElementById('tela-final');
+const listaAcertos = document.getElementById('lista-acertos');
+const listaErros = document.getElementById('lista-erros');
 
-let flashcards = [];
-let currentIndex = 0;
-let currentSet = [];
-let correct = [];
-let wrong = [];
+let cartoes = [];
+let conjuntoAtual = [];
+let indiceAtual = 0;
+let acertos = [];
+let erros = [];
 
-function parseInput(input) {
-  return input.split('\n').map(line => {
-    const match = line.match(/P:\s*(.*?)\s*\/\s*R:\s*(.*)/);
-    return match ? { question: match[1], answer: match[2] } : null;
-  }).filter(x => x);
+function interpretarEntrada(texto) {
+  return texto.split('\n').map(linha => {
+    const match = linha.match(/P:\s*(.*?)\s*\/\s*R:\s*(.*)/);
+    return match ? { pergunta: match[1], resposta: match[2] } : null;
+  }).filter(Boolean);
 }
 
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
+function embaralhar(lista) {
+  for (let i = lista.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
+    [lista[i], lista[j]] = [lista[j], lista[i]];
   }
-  return array;
+  return lista;
 }
 
-function startQuiz() {
-  flashcards = parseInput(inputArea.value);
-  currentIndex = 0;
-  correct = [];
-  wrong = [];
-  finalScreen.style.display = 'none';
-  quizArea.style.display = 'block';
-  answerText.classList.add('hidden');
-  gotItRight.classList.add('hidden');
-  gotItWrong.classList.add('hidden');
-
-  currentSet = originalOrder.checked ? flashcards.slice() : shuffle(flashcards.slice());
-  showNextQuestion();
-}
-
-function showNextQuestion() {
-  if (currentIndex >= currentSet.length) {
-    finishQuiz();
+function iniciarQuiz() {
+  cartoes = interpretarEntrada(areaEntrada.value);
+  if (cartoes.length === 0) {
+    alert('Adicione perguntas válidas!');
     return;
   }
-  const card = currentSet[currentIndex];
-  questionText.textContent = `P: ${card.question}`;
-  answerText.textContent = `R: ${card.answer}`;
-  answerText.classList.add('hidden');
-  gotItRight.classList.add('hidden');
-  gotItWrong.classList.add('hidden');
+  indiceAtual = 0;
+  acertos = [];
+  erros = [];
+  conjuntoAtual = chkOrdemOriginal.checked ? cartoes.slice() : embaralhar(cartoes.slice());
+
+  document.querySelector('.container-entrada').style.display = 'none';
+  areaQuiz.style.display = 'block';
+  telaFinal.style.display = 'none';
+  mostrarProximo();
 }
 
-function showAnswerText() {
-  answerText.classList.remove('hidden');
-  gotItRight.classList.remove('hidden');
-  gotItWrong.classList.remove('hidden');
+function mostrarProximo() {
+  if (indiceAtual >= conjuntoAtual.length) {
+    finalizarQuiz();
+    return;
+  }
+  const cartao = conjuntoAtual[indiceAtual];
+  textoPergunta.textContent = `P: ${cartao.pergunta}`;
+  textoResposta.textContent = `R: ${cartao.resposta}`;
+  textoResposta.classList.add('oculto');
+  botaoAcertou.classList.add('oculto');
+  botaoErrou.classList.add('oculto');
 }
 
-function recordAnswer(correctAnswer) {
-  const card = currentSet[currentIndex];
-  (correctAnswer ? correct : wrong).push(card);
-  currentIndex++;
-  showNextQuestion();
+function mostrarResposta() {
+  textoResposta.classList.remove('oculto');
+  botaoAcertou.classList.remove('oculto');
+  botaoErrou.classList.remove('oculto');
 }
 
-function finishQuiz() {
-  quizArea.style.display = 'none';
-  finalScreen.style.display = 'block';
-  correctList.innerHTML = correct.map(c => `<li>P: ${c.question} / R: ${c.answer}</li>`).join('');
-  wrongList.innerHTML = wrong.map(c => `<li>P: ${c.question} / R: ${c.answer}</li>`).join('');
+function registrarResposta(correto) {
+  const cartao = conjuntoAtual[indiceAtual];
+  if (correto) {
+    acertos.push(cartao);
+  } else {
+    erros.push(cartao);
+  }
+  indiceAtual++;
+  mostrarProximo();
 }
 
-function restart(onlyWrong) {
-  currentSet = onlyWrong ? wrong.slice() : flashcards.slice();
-  if (!originalOrder.checked) currentSet = shuffle(currentSet);
-  correct = [];
-  wrong = [];
-  currentIndex = 0;
-  finalScreen.style.display = 'none';
-  quizArea.style.display = 'block';
-  showNextQuestion();
+function finalizarQuiz() {
+  areaQuiz.style.display = 'none';
+  telaFinal.style.display = 'block';
+  listaAcertos.innerHTML = acertos.map(c => `<li class="acerto">P: ${c.pergunta} / R: ${c.resposta}</li>`).join('');
+  listaErros.innerHTML = erros.map(c => `<li class="erro">P: ${c.pergunta} / R: ${c.resposta}</li>`).join('');
 }
 
-startButton.addEventListener('click', startQuiz);
-showAnswer.addEventListener('click', showAnswerText);
-gotItRight.addEventListener('click', () => recordAnswer(true));
-gotItWrong.addEventListener('click', () => recordAnswer(false));
+function reiniciar(somenteErros) {
+  conjuntoAtual = somenteErros ? erros.slice() : cartoes.slice();
+  if (chkOrdemAleatoria.checked) conjuntoAtual = embaralhar(conjuntoAtual);
+  indiceAtual = 0;
+  acertos = [];
+  erros = [];
+  telaFinal.style.display = 'none';
+  areaQuiz.style.display = 'block';
+  mostrarProximo();
+}
+
+botaoIniciar.addEventListener('click', iniciarQuiz);
+botaoMostrarResposta.addEventListener('click', mostrarResposta);
+botaoAcertou.addEventListener('click', () => registrarResposta(true));
+botaoErrou.addEventListener('click', () => registrarResposta(false));
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && inputArea.value.trim() !== '') {
-    startQuiz();
+  if (e.key === 'Enter' && areaEntrada.value.trim()) {
+    iniciarQuiz();
   }
 });
