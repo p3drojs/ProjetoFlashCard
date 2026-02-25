@@ -1,0 +1,26 @@
+collections
+decks -> cards( n irei usar embedd)
+quizssesions?
+attempt
+
+cruds
+implementar validation
+users
+
+decks
+{
+  "_id": "",
+  "ownerId": "",
+  "title": "",
+  "createdAt": "",
+  "updatedAt": ""
+}
+cards
+{
+  "_id": "",
+  "deckId": "",
+  "question": "",
+  "answer": "",
+  "createdAt": "",
+  "updatedAt": ""
+}
