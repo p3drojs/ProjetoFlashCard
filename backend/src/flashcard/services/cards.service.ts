@@ -17,7 +17,7 @@ class CardsServices{
         return updateCard;
     }
     async delete(cardId: String){
-        const newCard = Cards.findByIdAndDelete(cardId);
+        Cards.findByIdAndDelete(cardId);
     }
     async list():Promise<cardsTypes[]>{
         const cards =  Cards.find();
